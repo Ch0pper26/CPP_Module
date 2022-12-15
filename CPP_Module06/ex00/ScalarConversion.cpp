@@ -6,7 +6,7 @@
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 11:34:19 by eblondee          #+#    #+#             */
-/*   Updated: 2022/12/15 13:10:00 by eblondee         ###   ########.fr       */
+/*   Updated: 2022/12/15 18:05:26 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ double	ScalarConversion::doubleConversion(std::string toConvert)
 		tmp = (double) toConvert[0];
 		return (tmp);
 	}
+	//nan inf
 	tmp = strtod(toConvert.c_str(), NULL);
 	return (tmp);
 }
@@ -93,6 +94,7 @@ float	ScalarConversion::floatConversion(std::string toConvert)
 		tmp = (float) toConvert[0];
 		return (tmp);
 	}
+	//nanf inff
 	tmp = strtof(toConvert.c_str(), NULL);
 	return (tmp);
 }
@@ -102,11 +104,12 @@ char	ScalarConversion::charConversion(std::string toConvert)
 	char	*endPtr;
 	long	tmp;
 	char	c;
+	int		i;
 
 	if (_firstType == 'c')
 	{
-		_isPrint[2] = 'c';
 		c = toConvert[0];
+		
 		return (c);
 	}
 	tmp = strtol(toConvert.c_str(), &endPtr, 10);
@@ -115,7 +118,17 @@ char	ScalarConversion::charConversion(std::string toConvert)
 		_isPrint[2] = 'i';
 		return (0);
 	}
-	_isPrint[2] = 'c';
+	while (tmp[i])
+	{
+		if (tmp[i] != '0' && tmp[i] != '.' && tmp[i] != 'f')
+		{
+			_isPrint[2] = 'i';
+			return (0);
+		}
+	}
+	// non disp
+	c = (int) tmp;
+	_isPrint[2] = 'p';
 	return (tmp);
 }
 
