@@ -24,6 +24,6 @@ int	main(int argc, char **argv)
 	{
 		std::cout << "Error : Impossible Conversion" << std::endl;
 	}
-	std::cout << ScalarConversion::floatConversion(argv[1]) << std::endl;
+//	std::cout << ScalarConversion::floatConversion(argv[1]) << std::endl;
 	return (0);
 }

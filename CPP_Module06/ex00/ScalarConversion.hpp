@@ -6,7 +6,7 @@
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 11:34:19 by eblondee          #+#    #+#             */
-/*   Updated: 2022/12/15 10:15:02 by eblondee         ###   ########.fr       */
+/*   Updated: 2022/12/15 11:48:42 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class ScalarConversion
 		char	_charConversion;
 		int		_intConversion;
 		char	_firstType;
-		std::string	_isPrint[4];
+		std::string	_isPrint;
 
 		double	doubleConversion(std::string toConvert);
 		float	floatConversion(std::string toConvert);

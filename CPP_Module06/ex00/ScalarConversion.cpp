@@ -6,7 +6,7 @@
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 11:34:19 by eblondee          #+#    #+#             */
-/*   Updated: 2022/12/15 11:19:34 by eblondee         ###   ########.fr       */
+/*   Updated: 2022/12/15 13:10:00 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ ScalarConversion::ScalarConversion(void)
 	_charConversion = charConversion("42");
 	_intConversion = intConversion("42");
 	_firstType = 'i';
-	_isPrint = "pppp"
+	_isPrint = "pppp";
 }
 
 ScalarConversion::ScalarConversion(std::string toConvert)
@@ -46,7 +46,7 @@ ScalarConversion::~ScalarConversion(void)
 /* --  Public  -- */
 /* -- Get -- */
 
-double	ScalarConversion::getD ouble(void) const
+double	ScalarConversion::getDouble(void) const
 {
 	return (_doubleConversion);
 }
@@ -66,7 +66,6 @@ int		ScalarConversion::getInt(void) const
 	return (_intConversion);
 }
 
-
 /* --  Private -- */
 /* -- Conversion -- */
 
@@ -74,9 +73,10 @@ double	ScalarConversion::doubleConversion(std::string toConvert)
 {
 	double	tmp ;
 
+	_isPrint[0] = 'p';
 	if (_firstType == 'c')
 	{
-		tmp = (double) tmp;
+		tmp = (double) toConvert[0];
 		return (tmp);
 	}
 	tmp = strtod(toConvert.c_str(), NULL);
@@ -87,9 +87,10 @@ float	ScalarConversion::floatConversion(std::string toConvert)
 {
 	float	tmp ;
 
+	_isPrint[1] = 'p';
 	if (_firstType == 'c')
 	{
-		tmp = (float) tmp;
+		tmp = (float) toConvert[0];
 		return (tmp);
 	}
 	tmp = strtof(toConvert.c_str(), NULL);
@@ -99,13 +100,22 @@ float	ScalarConversion::floatConversion(std::string toConvert)
 char	ScalarConversion::charConversion(std::string toConvert)
 {
 	char	*endPtr;
-	long	tmp ;
+	long	tmp;
+	char	c;
 
-	tmp = strtol(toConvert.c_str(), &endPtr, 10);
-	if (!endPtr[0] || tmp > 127 || tmp < 0)
+	if (_firstType == 'c')
 	{
+		_isPrint[2] = 'c';
+		c = toConvert[0];
+		return (c);
+	}
+	tmp = strtol(toConvert.c_str(), &endPtr, 10);
+	if (tmp > 127 || tmp < 0)
+	{
+		_isPrint[2] = 'i';
 		return (0);
 	}
+	_isPrint[2] = 'c';
 	return (tmp);
 }
 
@@ -114,6 +124,11 @@ int		ScalarConversion::intConversion(std::string toConvert)
 	char	*endPtr;
 	long	tmp ;
 
+	if (_firstType == 'c')
+	{
+		tmp = (int) toConvert[0];
+		return (tmp);
+	}
 	tmp = strtol(toConvert.c_str(), &endPtr, 10);
 	if (!endPtr[0] || tmp > INT_MAX || tmp < INT_MIN)
 	{
