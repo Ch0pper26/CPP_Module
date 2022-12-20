@@ -118,9 +118,9 @@ char	ScalarConversion::charConversion(std::string toConvert)
 		_isPrint[2] = 'i';
 		return (0);
 	}
-	while (tmp[i])
+	while (endPtr[i])
 	{
-		if (tmp[i] != '0' && tmp[i] != '.' && tmp[i] != 'f')
+		if (endPtr[i] != '0' && endPtr[i] != '.' && endPtr[i] != 'f')
 		{
 			_isPrint[2] = 'i';
 			return (0);
