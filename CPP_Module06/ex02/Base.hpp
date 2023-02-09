@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Base.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 11:18:10 by eblondee          #+#    #+#             */
-/*   Updated: 2023/01/10 10:14:02 by eblondee         ###   ########.fr       */
+/*   Created: 2023/01/10 11:44:21 by eblondee          #+#    #+#             */
+/*   Updated: 2023/01/10 11:46:29 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ScalarConversion.hpp"
+#ifndef BASE_HPP
+#define BASE_HPP
 
-int	main(int argc, char **argv)
+class Base
 {
-	if (argc == 1 || argc > 2)
-		return (1);
-	try
-	{
-		ScalarConversion test(argv[1]);
-		std::cout << test << std::endl;
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	return (0);
-}
+	public :
+
+		virtual ~Base(void);
+};
+
+#endif

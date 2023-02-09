@@ -1,29 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   A.cpp                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 11:18:10 by eblondee          #+#    #+#             */
-/*   Updated: 2023/01/10 10:14:02 by eblondee         ###   ########.fr       */
+/*   Created: 2023/01/10 11:59:38 by eblondee          #+#    #+#             */
+/*   Updated: 2023/01/10 13:42:32 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ScalarConversion.hpp"
+#include "A.hpp"
 
-int	main(int argc, char **argv)
+A::~A(void)
 {
-	if (argc == 1 || argc > 2)
-		return (1);
-	try
-	{
-		ScalarConversion test(argv[1]);
-		std::cout << test << std::endl;
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	return (0);
 }

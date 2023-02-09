@@ -5,25 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 11:18:10 by eblondee          #+#    #+#             */
-/*   Updated: 2023/01/10 10:14:02 by eblondee         ###   ########.fr       */
+/*   Created: 2023/01/11 11:06:49 by eblondee          #+#    #+#             */
+/*   Updated: 2023/01/11 11:50:23 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ScalarConversion.hpp"
+#include "iter.hpp"
 
-int	main(int argc, char **argv)
+int	main(void)
 {
-	if (argc == 1 || argc > 2)
-		return (1);
-	try
-	{
-		ScalarConversion test(argv[1]);
-		std::cout << test << std::endl;
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	return (0);
+	std::string a = "Allo";
+	int b[5] = {1, 2, 3, 4, 5};
+
+	::iter(a.c_str(), a.size(), &display);
+
+	std::cout << std::endl;
+
+	::iter(b, 5, &display);
 }

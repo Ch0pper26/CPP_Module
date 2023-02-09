@@ -5,25 +5,39 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 11:18:10 by eblondee          #+#    #+#             */
-/*   Updated: 2023/01/10 10:14:02 by eblondee         ###   ########.fr       */
+/*   Created: 2023/01/10 11:11:39 by eblondee          #+#    #+#             */
+/*   Updated: 2023/01/10 11:39:07 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ScalarConversion.hpp"
+#include "data.hpp"
 
-int	main(int argc, char **argv)
+uintptr_t serialize(Data* ptr)
 {
-	if (argc == 1 || argc > 2)
-		return (1);
-	try
-	{
-		ScalarConversion test(argv[1]);
-		std::cout << test << std::endl;
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	return (0);
+	return (reinterpret_cast<uintptr_t>(ptr));
+}
+
+Data* deserialize(uintptr_t raw)
+{
+	return (reinterpret_cast<Data *>(raw));
+}
+
+int	main(void)
+{
+	uintptr_t	tmp;
+	Data	*ptr;
+
+	ptr = new Data;
+	ptr->test = 42;
+
+	std::cout << "Before serialization : adress = " << ptr << " value = "
+		<< ptr->test << std::endl;
+
+	tmp = serialize(ptr);
+	ptr = deserialize(tmp);
+
+	std::cout << "After serialization : adress = " << ptr << " value = "
+		<< ptr->test << std::endl;
+
+	delete ptr; 
 }

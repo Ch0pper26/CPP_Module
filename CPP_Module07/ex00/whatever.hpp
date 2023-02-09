@@ -1,29 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   whatever.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 11:18:10 by eblondee          #+#    #+#             */
-/*   Updated: 2023/01/10 10:14:02 by eblondee         ###   ########.fr       */
+/*   Created: 2023/01/11 10:57:50 by eblondee          #+#    #+#             */
+/*   Updated: 2023/01/11 11:21:03 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ScalarConversion.hpp"
+#ifndef WHATEVER_HPP
+#define WHATEVER_HPP
 
-int	main(int argc, char **argv)
+#include <iostream>
+#include <string>
+
+template<typename T>
+T	max(const T& a, const T& b)
 {
-	if (argc == 1 || argc > 2)
-		return (1);
-	try
-	{
-		ScalarConversion test(argv[1]);
-		std::cout << test << std::endl;
-	}
-	catch (const std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	return (0);
+	if (a > b)
+		return (a);
+	else
+		return (b);
 }
+
+template<typename T>
+T	min(const T& a, const T& b)
+{
+	if (a < b)
+		return (a);
+	else
+		return (b);
+}
+
+template<typename T>
+void	swap(T& a, T& b)
+{
+	T tmp;
+
+	tmp = a;
+	a = b;
+	b = tmp;
+}
+
+
+#endif

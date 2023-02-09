@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+	/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   ScalarConversion.cpp                               :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: eblondee <eblondee@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 11:34:19 by eblondee          #+#    #+#             */
-/*   Updated: 2022/12/15 18:05:26 by eblondee         ###   ########.fr       */
+/*   Updated: 2023/01/10 11:01:13 by eblondee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,77 @@
 
 ScalarConversion::ScalarConversion(void)
 {
-	_doubleConversion = ScalarConversion::doubleConversion("42");
-	_floatConversion = floatConversion("42");
-	_charConversion = charConversion("42");
-	_intConversion = intConversion("42");
+	_intConversion = atoi("42");
+	_doubleConversion = static_cast<double>(_intConversion);
+	_floatConversion = static_cast<float>(_intConversion);
+	_charConversion = static_cast<char>(_intConversion);
 	_firstType = 'i';
-	_isPrint = "pppp";
+	_isPrint = "pp";
+	_precision = 1;
 }
 
 ScalarConversion::ScalarConversion(std::string toConvert)
 {
-	_isPrint = "iiii";
+	_isPrint = "ii";
 	_firstType = findType(toConvert);
-	if (_firstType == 'e')
-		throw (std::exception());
-	std::cout << _firstType << std::endl;
+	_precision = definePrecision(toConvert);
+	switch (_firstType)
+	{
+		case 'c':
+			_isPrint[0] = 'p';
+			_charConversion = toConvert[0];
+			if (_charConversion < 32 || _charConversion == 127)
+				_isPrint[0] = 'd';
+			_doubleConversion = static_cast<double>(_charConversion);
+			_floatConversion = static_cast<float>(_charConversion);
+			_intConversion = static_cast<int>(_charConversion);
+			_isPrint[1] = 'p';
+			break;
+
+		case 'i':
+			_intConversion = atoi(toConvert.c_str());
+			_isPrint[1] = 'p';
+			_floatConversion = static_cast<float>(_intConversion);
+			_doubleConversion = static_cast<double>(_intConversion);
+			_charConversion = charConversion(_doubleConversion);
+			break;
+
+		case 'f':
+			_floatConversion = strtof(toConvert.c_str(), NULL);
+			_doubleConversion = static_cast<double>(_floatConversion);
+			_charConversion = charConversion(_doubleConversion);
+			if (_floatConversion <= INT_MAX && _floatConversion >= INT_MIN )
+			{
+				_intConversion = static_cast<int>(_floatConversion);
+				_isPrint[1] = 'p';
+			}
+			else
+			{
+				_intConversion = 0;
+				_isPrint[1] = 'i';
+			}
+			break;
+		
+		case 'd':
+			_doubleConversion = strtod(toConvert.c_str(), NULL);
+			_floatConversion = static_cast<float>(_doubleConversion);
+			_charConversion = charConversion(_doubleConversion);
+			if (_doubleConversion <= INT_MAX && _doubleConversion >= INT_MIN )
+			{
+				_intConversion = static_cast<int>(_doubleConversion);
+				_isPrint[1] = 'p';
+			}
+			else
+			{
+				_intConversion = 0;
+				_isPrint[1] = 'i';
+			}
+			break;
+
+		default:
+			throw (ImpossibleConversionException("Error : Impossible Conversion"));
+			break;
+	}
 }
 
 ScalarConversion::ScalarConversion(const ScalarConversion& toCopy)
@@ -66,89 +122,39 @@ int		ScalarConversion::getInt(void) const
 	return (_intConversion);
 }
 
+int		ScalarConversion::getPrecision(void) const
+{
+	return (_precision);
+}
+
+std::string ScalarConversion::getisPrint(void) const
+{
+	return (_isPrint);
+}
+
 /* --  Private -- */
 /* -- Conversion -- */
 
-double	ScalarConversion::doubleConversion(std::string toConvert)
+char	ScalarConversion::charConversion(double toConvert)
 {
-	double	tmp ;
-
-	_isPrint[0] = 'p';
-	if (_firstType == 'c')
-	{
-		tmp = (double) toConvert[0];
-		return (tmp);
-	}
-	//nan inf
-	tmp = strtod(toConvert.c_str(), NULL);
-	return (tmp);
-}
-
-float	ScalarConversion::floatConversion(std::string toConvert)
-{
-	float	tmp ;
-
-	_isPrint[1] = 'p';
-	if (_firstType == 'c')
-	{
-		tmp = (float) toConvert[0];
-		return (tmp);
-	}
-	//nanf inff
-	tmp = strtof(toConvert.c_str(), NULL);
-	return (tmp);
-}
-
-char	ScalarConversion::charConversion(std::string toConvert)
-{
-	char	*endPtr;
-	long	tmp;
+	int		tmp;
 	char	c;
-	int		i;
 
-	if (_firstType == 'c')
+	tmp = static_cast<int>(toConvert);
+	if (tmp == toConvert && toConvert >= 0 && toConvert <= 127)
 	{
-		c = toConvert[0];
-		
-		return (c);
+		c = static_cast<char>(tmp);
+		if (tmp < 32 || tmp == 127)
+			_isPrint[0] = 'd';
+		else
+			_isPrint[0] = 'p';
 	}
-	tmp = strtol(toConvert.c_str(), &endPtr, 10);
-	if (tmp > 127 || tmp < 0)
+	else
 	{
+		c = 0;
 		_isPrint[2] = 'i';
-		return (0);
 	}
-	while (endPtr[i])
-	{
-		if (endPtr[i] != '0' && endPtr[i] != '.' && endPtr[i] != 'f')
-		{
-			_isPrint[2] = 'i';
-			return (0);
-		}
-	}
-	// non disp
-	c = (int) tmp;
-	_isPrint[2] = 'p';
-	return (tmp);
-}
-
-int		ScalarConversion::intConversion(std::string toConvert)
-{
-	char	*endPtr;
-	long	tmp ;
-
-	if (_firstType == 'c')
-	{
-		tmp = (int) toConvert[0];
-		return (tmp);
-	}
-	tmp = strtol(toConvert.c_str(), &endPtr, 10);
-	if (!endPtr[0] || tmp > INT_MAX || tmp < INT_MIN)
-	{
-		std::cout << "Can't convert this string to int" << std::endl;
-		return (0);
-	}
-	return (tmp);
+	return (c);
 }
 
 /* -- Is Type -- */
@@ -159,9 +165,11 @@ char	ScalarConversion::findType(std::string toFind) const
 
 	type = '\0';
 	type = isChar(toFind);
-	if (type == '\0' && (toFind == "-inff" || toFind == "+inff" || toFind == "nanf"))
+	if (type == '\0' && (toFind == "-inff" || toFind == "+inff"
+			|| toFind == "nanf" || toFind == "inff"))
 		type = 'f';
-	if (type == '\0' && (toFind == "-inf" || toFind == "+inf" || toFind == "nan"))
+	if (type == '\0' && (toFind == "-inf" || toFind == "+inf"
+			|| toFind == "nan" || toFind == "inf"))
 		type = 'd';
 	if (type == '\0' && (nbOcc(toFind, '.') > 1 || nbOcc(toFind, 'f') > 1
 			|| nbOcc(toFind, '-') > 1 || !isNumber(toFind)))
@@ -204,7 +212,6 @@ char	ScalarConversion::isFloat(std::string toFind) const
 
 char	ScalarConversion::isDouble(std::string toFind) const
 {
-	std::cout << (int)toFind.find(".") << std::endl;
 	if ((int)toFind.find(".") == -1)
 		return ('\0');
 	return ('d');
@@ -217,8 +224,24 @@ char	ScalarConversion::isInt(std::string toFind) const
 	return ('i');
 }
 
-
 /* -- Utils -- */
+
+int		ScalarConversion::definePrecision(std::string number) const
+{
+	int	i = number.find(".") + 1;
+	int	precision = 0;
+
+	if (_firstType == 'c' || _firstType == 'i')
+		return (1);
+	if (number[i] == '\0'|| number[i] == 'f')
+		return (1);
+	while (number[i] && number[i] != 'f')
+	{
+		precision++;
+		i++;
+	}
+	return (precision);
+}
 
 int		ScalarConversion::nbOcc(std::string str, char c) const
 {
@@ -251,6 +274,21 @@ bool	ScalarConversion::isNumber(std::string number) const
 	return (true);
 }
 
+/* Impossible Conversion Exception */
+
+ScalarConversion::ImpossibleConversionException::ImpossibleConversionException(std::string error)
+{
+	_error = error;
+}
+
+ScalarConversion::ImpossibleConversionException::~ImpossibleConversionException(void) throw()
+{
+}
+
+const char* ScalarConversion::ImpossibleConversionException::what() const throw()
+{
+	return (_error.c_str());
+}
 
 /* Operator */
 /* -- Assigment -- */
@@ -265,6 +303,7 @@ ScalarConversion& ScalarConversion::operator=(const ScalarConversion& toCopy)
 	_intConversion = toCopy._intConversion;
 	_firstType = toCopy._firstType;
 	_isPrint = toCopy._isPrint;
+	_precision = toCopy._precision;
 	return (*this);
 }
 
@@ -272,6 +311,28 @@ ScalarConversion& ScalarConversion::operator=(const ScalarConversion& toCopy)
 
 std::ostream&	operator<<(std::ostream& flux, const ScalarConversion& toPrint)
 {
-	(void) toPrint;
+	int	precision;
+
+	precision = toPrint.getPrecision();
+	std::string	print = toPrint.getisPrint();
+
+	if (print[0] == 'p')
+		flux << "char: '" << toPrint.getChar() << "'" << std::endl;
+	else if (print[0] == 'd')
+		flux << "char: Non displayable" << std::endl;
+	else
+		flux << "char : impossible" << std::endl;
+
+	if (print[1] == 'p')
+		flux << "int: " << toPrint.getInt() << std::endl;
+	else
+		flux << "int: impossible" << std::endl;
+
+	flux << "float: " << std::fixed << std::setprecision(precision) 
+			<< toPrint.getFloat() << 'f' << std::endl;
+	
+	flux << "double: " << std::fixed << std::setprecision(precision) 
+			<< toPrint.getDouble();
+
 	return (flux);
 }
